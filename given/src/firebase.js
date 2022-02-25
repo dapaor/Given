@@ -10,6 +10,7 @@ const firebaseConfig = {
   databaseURL:"https://given-b6d8f-default-rtdb.europe-west1.firebasedatabase.app/",
   appId: "1:768901697904:web:f7a618413338910e8d7fb5"
 };
-  const db = firebase.initializeApp(firebaseConfig);
+
+const db = firebase.initializeApp(firebaseConfig);
 
 export default db;

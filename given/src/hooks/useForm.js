@@ -1,4 +1,8 @@
 import {useState, useEffect} from 'react';
+import {addDoc } from 'firebase/firestore';
+import db from '../firebase';
+import { getFirestore, collection } from 'firebase/firestore';
+
 const useForm = (callback,validate) =>{
     const [values, setValues] = useState({
         nombre: '',
@@ -17,10 +21,17 @@ const useForm = (callback,validate) =>{
         });
     }
     const handleSubmit = e =>{
-        e.preventDefault();
-
-        setErrors(validate(values));
-        setIsSubmitting(true);
+      const dbuse = getFirestore(db);
+      const userRef = collection(dbuse, "users"); 
+      e.preventDefault();
+      setUser(userRef);
+      setErrors(validate(values));
+      setIsSubmitting(true);
+      
+    }
+    async function setUser(db){
+      await addDoc(db, {
+          nombre: values.nombre, apellidos: values.apellidos, email: values.email, pwd: values.password1,});
     }
     useEffect(
         () => {

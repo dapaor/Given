@@ -46,7 +46,7 @@
   border-radius: 10px 10px 10px 10px;
 }
 .h2{
-  color:683aa4;
+  color:#683aa4;
 }
 .form h1 {
   font-size: 2rem;
@@ -136,4 +136,11 @@
 }
 .linkLogin{
     margin:0;
+}
+a{
+  color:#683aa4;
+  text-decoration: none;
+}
+a:hover{
+  color: rgb(215, 189, 226)
 }

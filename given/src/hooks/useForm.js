@@ -1,8 +1,7 @@
 import {useState, useEffect} from 'react';
-import {addDoc } from 'firebase/firestore';
+import {addDoc,getFirestore,collection} from 'firebase/firestore';
 import db from '../firebase';
-import { getFirestore, collection } from 'firebase/firestore';
-
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 const useForm = (callback,validate) =>{
     const [values, setValues] = useState({
         nombre: '',
@@ -21,25 +20,42 @@ const useForm = (callback,validate) =>{
         });
     }
     const handleSubmit = e =>{
-      const dbuse = getFirestore(db);
-      const userRef = collection(dbuse, "users"); 
       e.preventDefault();
-      setUser(userRef);
       setErrors(validate(values));
       setIsSubmitting(true);
-      
+      Registrar();
+    }
+    
+    function Registrar(){
+      const auth = getAuth();
+      createUserWithEmailAndPassword(auth, values.email, values.password1)
+        .then((userCredential) => {
+          auth.currentUser.displayName=values.nombre+" "+values.apellidos;
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          console.log("Code "+errorCode+": "+errorMessage);
+          // ..
+        });
+        const dbuse = getFirestore(db);
+        setUser(dbuse);
     }
     async function setUser(db){
-      await addDoc(db, {
-          nombre: values.nombre, apellidos: values.apellidos, email: values.email, pwd: values.password1,});
+      await addDoc(collection(db, "users"), {
+        nombre: values.nombre,
+        apellidos: values.apellidos,
+        email: values.email.toLowerCase(),
+      });
     }
+    
     useEffect(
         () => {
           if (Object.keys(errors).length === 0 && isSubmitting) {
             callback();
           }
         },
-        [errors]
+        [errors,isSubmitting,callback]
       );
     return{handleChange,values,handleSubmit,errors}
 }

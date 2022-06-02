@@ -1,0 +1,25 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:600|Work+Sans:400,500,600,700&display=swap');
+
+.navbar{
+    border-radius: 1%;
+    align-items: center;
+}
+.navbar-brand{
+    color:rgba(104,58,164,1);
+    font-size:x-large;
+    text-decoration: solid;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif
+}
+.navbar-brand:hover{
+    color:whitesmoke;
+}
+.navbar-link-but{
+    border-color: white;
+    background-color:white;
+    border:0;
+    color:rgba(104,58,164,1);
+    text-decoration: none;
+}
+.navbar-link-but:hover{
+    color:rgb(93, 109, 126 );
+}

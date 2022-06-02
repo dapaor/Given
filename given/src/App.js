@@ -1,4 +1,3 @@
-import Login from './pages/Login';
 import {
   BrowserRouter as Router,
   Switch,
@@ -8,29 +7,40 @@ import Main from './pages/Main';
 import CreaEventos from './pages/CreaEventos';
 import Register from './pages/Register';
 import ModificaEvento from './pages/ModificaEvento';
-import TestDB from './pages/TestDB';
 import Perfil from './pages/Perfil';
 import EditarPerfil from './pages/EditarPerfil';
 import TestQR from './pages/TestQR';
+import LoginForm from './components/LoginForm';
+import { getAuth } from "firebase/auth";
+import { useState } from "react";
+import { useEffect } from "react";
+import Navbar from "./components/Navbar";
+import ListaEventos from "./pages/ListaEventos";
+import Evento from "./pages/Evento";
+
 function App() {
-  return (
+  const [firebaseUser,setFirebaseUser] = useState(false);
+  useEffect(() => {
+    getAuth().onAuthStateChanged(user => {
+      if(user){setFirebaseUser(user)}else{setFirebaseUser(null)}
+    })
+  },[])
+  return firebaseUser !== false ? (
     <Router>
       <div className ="container">
+        <Navbar firebaseUser={firebaseUser}/>
         <Switch>
           <Route path="/register">
             <Register />
           </Route>
           <Route path="/login">
-            <Login />
+            <LoginForm />
           </Route>
           <Route path="/crearEvento" exact>
             <CreaEventos/>
           </Route>
           <Route path="/modificarEvento" exact>
             <ModificaEvento/>
-          </Route>
-          <Route path="/testDB" exact>
-            <TestDB/>
           </Route>
           <Route path="/perfil" exact>
             <Perfil/>
@@ -41,12 +51,20 @@ function App() {
           <Route path="/testQR" exact>
             <TestQR/>
           </Route>
+          <Route path="/listaEventos">
+            <ListaEventos/>
+          </Route>
+          <Route path="/evento/">
+            <Evento/>
+          </Route>
           <Route path="/" exact>
             <Main/>
           </Route>
         </Switch>
       </div>
     </Router>
+  ) : (
+    <p>Cargando...</p>
   );
 }
 

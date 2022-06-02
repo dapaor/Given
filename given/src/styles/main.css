@@ -1,0 +1,23 @@
+.main-content-div{
+    position: relative;
+    padding:10%;
+    box-shadow: 0 5px 8px 0 rgba(0, 0, 0, 0.2), 0 7px 20px 0 rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+}
+#ProxEventos{
+    border-radius: 10px 0 0 10px;
+    position: relative;
+    
+}
+.eventoChild{
+    border-radius: 10px 0 0 10px;
+    position: relative;
+    text-align:left;
+    padding:2%;
+    box-shadow: 3%;
+}
+p{
+    color: rgb(215, 189, 226);
+    margin-left: 5%;
+    font-size: medium;
+}

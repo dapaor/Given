@@ -1,5 +1,6 @@
 import React,{ useEffect, useState } from 'react'
 import '../styles/perfil.css'
+import '../styles/editarPerfil.css'
 import validate from '../util/validateInfo';
 import { withRouter } from 'react-router-dom';
 import { getAuth, updateEmail, updatePassword, updateProfile } from 'firebase/auth';
@@ -27,6 +28,8 @@ const EditarPerf = (props,{submitForm}) => {
         password2: ''
     })
     const [errors, setErrors] = useState({});
+
+    //ACTUALIZAR PERFIL
     const actualiza = (props) => {
         setErrors(validate(values));
 
@@ -62,9 +65,15 @@ const EditarPerf = (props,{submitForm}) => {
         upload(photo,setLoading)
     }
     async function upload(file,setLoading){
-        const fileRef = ref(getStorage(), getAuth().currentUser.uid+'.png')
+        var fileRef = ""; 
+        const queryUser = query(collection(dbuse,"users"),where("email","==",getAuth().currentUser.email));
+        await getDocs(queryUser).then((docs) => {
+            docs.forEach((doc) => {
+                fileRef = ref(getStorage(), doc.id.toString()+'.png')
+            })
+        })
         setLoading(true)
-        const snapshot = await uploadBytes(fileRef,file)
+        await uploadBytes(fileRef,file)
         setLoading(false)
         const photoURL = await getDownloadURL(fileRef);
         updateProfile(getAuth().currentUser, {photoURL: photoURL})
@@ -120,10 +129,11 @@ const EditarPerf = (props,{submitForm}) => {
                     <label htmlFor="picture" className="form-label">Actualizar foto de perfil</label>
                     <input type="file" name="picture" className="form-input" placeholder="Repite tu contraseña"
                     onChange={handleChangePic}/>
-                    <button disable={loading || !photo}className='form-input-btn' type='button' onClick={handleOnClick}>Subir imagen</button>
+                    <button disable={loading || !photo} id="subirFoto" type='button' onClick={handleOnClick}>Subir imagen</button>
                 </div>
                 
                 <button className='form-input-btn' type='button' onClick={actualiza}>Confirmar cambios</button>
+                <button id="borrarCuenta" type="button">Solicitar eliminar cuenta</button>
             </form>
         </div>
     )

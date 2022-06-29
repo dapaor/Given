@@ -1,0 +1,7 @@
+#buttonCertificado{
+    color: rgb(215, 189, 226);
+    margin-left:5%;
+}
+#buttonCertificado:hover{
+    color:#683aa4;
+}

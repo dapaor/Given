@@ -3,20 +3,23 @@ import {
   Switch,
   Route,
 } from "react-router-dom"; 
-import Main from './pages/Main';
-import CreaEventos from './pages/CreaEventos';
-import Register from './pages/Register';
-import ModificaEvento from './pages/ModificaEvento';
-import Perfil from './pages/Perfil';
-import EditarPerfil from './pages/EditarPerfil';
-import TestQR from './pages/TestQR';
+import Main from './javascript/Main';
+import CreaEventos from './javascript/CreaEventos';
+import Register from './javascript/Register';
+import ModificaEvento from './javascript/ModificaEvento';
+import Perfil from './javascript/Perfil';
+import EditarPerfil from './javascript/EditarPerfil';
+import TestQR from './javascript/TestQR';
 import LoginForm from './components/LoginForm';
 import { getAuth } from "firebase/auth";
 import { useState } from "react";
 import { useEffect } from "react";
 import Navbar from "./components/Navbar";
-import ListaEventos from "./pages/ListaEventos";
-import Evento from "./pages/Evento";
+import ListaEventos from "./javascript/ListaEventos";
+import Evento from "./javascript/Evento.js";
+import EditaFormacion from "./javascript/EditaFormacion";
+import EventosAsistidos from "./javascript/EventosAsistidos";
+import GetCertificate from "./components/GetCertificate";
 
 function App() {
   const [firebaseUser,setFirebaseUser] = useState(false);
@@ -27,8 +30,8 @@ function App() {
   },[])
   return firebaseUser !== false ? (
     <Router>
+       <Navbar firebaseUser={firebaseUser}/>
       <div className ="container">
-        <Navbar firebaseUser={firebaseUser}/>
         <Switch>
           <Route path="/register">
             <Register />
@@ -42,7 +45,7 @@ function App() {
           <Route path="/modificarEvento" exact>
             <ModificaEvento/>
           </Route>
-          <Route path="/perfil" exact>
+          <Route path="/perfil" >
             <Perfil/>
           </Route>
           <Route path="/editarPerfil" exact>
@@ -57,8 +60,17 @@ function App() {
           <Route path="/evento/">
             <Evento/>
           </Route>
+          <Route path="/editarFormacion/">
+            <EditaFormacion/>
+          </Route>
+          <Route path="/eventosAsistidos">
+            <EventosAsistidos/>
+          </Route>
           <Route path="/" exact>
             <Main/>
+          </Route>
+          <Route path="/getCertificate">
+            <GetCertificate/>
           </Route>
         </Switch>
       </div>

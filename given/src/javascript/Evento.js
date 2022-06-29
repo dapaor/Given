@@ -6,11 +6,14 @@ import db from '../firebase';
 import { withRouter } from 'react-router-dom';
 import { Link } from 'react-router-dom'
 import { getFirestore,getDoc,doc,collection,addDoc,getDocs,query,deleteDoc,where} from "firebase/firestore";
+import {Map, InfoWindow, Marker, GoogleApiWrapper} from 'google-maps-react';
+import MapContainer from '../components/MapContainer';
+
 const Evento = (props) => {
     const dbuse = getFirestore(db);
     const url = window.location.href.toString();
     const idEvento = url.split("/").pop();
-    const [userID,setUserID] = useState('');
+    const [userID,setUserID] = useState("");
     const [nombreEvento, setNombreEvento] = useState("");
     const [descripcion,setDescripcion] = useState("");
     const [organizador,setOrganizador] = useState("");
@@ -22,13 +25,23 @@ const Evento = (props) => {
     const [email,setEmail] = useState("");
     const tematicas=[];
     const [tematica,setTematica] = useState("");
-    var orgString='';
-    async function leeEvento(){
-        if(getAuth().currentUser){
+    const [fechaFin,setFechaFin] = useState("");
+    const [orgString,setOrgString] = useState("");
 
+    const leeEvento= async ()=>{
+        if(getAuth().currentUser){
 
             const docRef = doc(dbuse, "eventos", idEvento);
             const docSnap = await getDoc(docRef);
+            setNombreEvento(docSnap.data().nombre)
+            setDescripcion(docSnap.data().descripcion)
+            setOrganizador(docSnap.data().organizador)
+            const qOrg = query(collection(dbuse,"users"), where("email","==",organizador))
+            const qOrgSnapShot = await getDocs(qOrg);
+            qOrgSnapShot.forEach((doc) => {
+                setOrgString("/perfil/"+doc.data().email)
+            })
+            setFechaFin(docSnap.data().fechafin);
             const q = query(collection(docRef,"participantes"));
             const querySnapshot = await getDocs(q);
             querySnapshot.forEach((doc) => {
@@ -37,34 +50,39 @@ const Evento = (props) => {
             });
             
             const queryUser = query(collection(dbuse,"users"),where("email","==",getAuth().currentUser.email.toString()))
-            const querySnapshot2 = await getDocs(queryUser);
-            querySnapshot2.forEach((doc) => {
-                setUserID(doc.id.toString())
-            })
-
-            const docRefUser = doc(dbuse, "users", userID); //tenemos el doc del user
-            const colTematicas = query(collection(docRefUser,"tematicas")); //tenemos la coleccion de tematicas preferidas del user
-            const tematicasSnapshot = await getDocs(colTematicas);
-            tematicasSnapshot.forEach((doc) =>{
-                tematicas.push(doc.data().nombre)
+            
+            getDocs(queryUser).then((docs)=>{
+                docs.forEach((docu) => {
+                    setUserID(docu.id.toString())
+                    const docRefUser = doc(dbuse, "users", docu.id.toString());
+                    const colTematicas = query(collection(docRefUser,"tematicas")); //tenemos la coleccion de tematicas preferidas del user
+                    gestionaTematicas(colTematicas,docSnap).then(() => {
+                        return docSnap.data();
+                    })
+                }) 
             });
-            setTematica(docSnap.data().tematica)
-            if(tematicas.includes(docSnap.data().tematica)) setSigueTem(true);
-            else setSigueTem(false);
-            return docSnap.data();
         }else{ 
             props.history.push("/login")
         }
+    }
+
+    async function gestionaTematicas(colTematicas,docSnap){
+        const tematicasSnapshot = await getDocs(colTematicas);
+        tematicasSnapshot.forEach((doc) =>{
+            tematicas.push(doc.data().nombre)
+        });
+        setTematica(docSnap.data().tematica)
+        if(tematicas.includes(docSnap.data().tematica)) setSigueTem(true);
+        else setSigueTem(false);
     }
     const procesarDatos = () => {
         
         leeEvento().then((evento) => {
             var boton = document.getElementById("participaButton")
-            setNombreEvento(evento.nombre)
-            setDescripcion(evento.descripcion)
-            setOrganizador(evento.organizador)
-            orgString="/perfil/"+organizador;
-            if(organizador.toString() === getAuth().currentUser.email.toString()) setSoyOrganizador(true);
+           
+            if(organizador.toString() === getAuth().currentUser.email.toString()) {
+                setSoyOrganizador(true);
+            }
             setNumParticipantes(participantes.length);
             if(participantes.find(element => element === getAuth().currentUser.email)) {
                 boton.innerHTML="No voy a asistir"
@@ -78,7 +96,6 @@ const Evento = (props) => {
                 botonTematica.innerHTML="Sigue esta temática";
             } 
         })
-        
     }
     const participa = () =>{
         if(esParticipante){
@@ -123,27 +140,59 @@ const Evento = (props) => {
         }
     }
     async function addParticipante() {
-        
         if(getAuth().currentUser){
             const eventosRef = collection(dbuse, "eventos"); 
             const eventoDoc = doc(eventosRef,idEvento);
             const membersRef = collection(eventoDoc,"participantes");
             await addDoc(membersRef, {
                 email: getAuth().currentUser.email,
-              });
-              window.location.reload()
+              }).then(anadeEventoAUser(getDoc(eventoDoc)));
+            window.location.reload();
         }else{ 
             props.history.push("/login")
         }
     }
+    async function auxAnadeEvento(colEventosUser){
+        await addDoc(colEventosUser, {
+            nombre: nombreEvento,
+            fechaFin: fechaFin
+        }); 
+    }
+    async function anadeEventoAUser(){
+        const queryUser = query(collection(dbuse,"users"),where("email","==",getAuth().currentUser.email.toString()));
+        getDocs(queryUser).then((docs)=>{
+            docs.forEach((docu) => {
+                const docRefUser = doc(dbuse, "users", docu.id.toString());
+                const colEventosUser = collection(docRefUser,"eventosAsistidos"); 
+                auxAnadeEvento(colEventosUser);
+            })
+        });
+    }
+    async function eliminaEventoAUser(){
+        const queryUser = query(collection(dbuse,"users"),where("email","==",getAuth().currentUser.email.toString()));
+        var colEventosUser;
+        var queryEvento;
+        getDocs(queryUser).then((docs)=>{
+            docs.forEach((docu) => {
+                const docRefUser = doc(dbuse, "users", docu.id.toString());
+                colEventosUser = collection(docRefUser,"eventosAsistidos");
+                queryEvento=query(colEventosUser,where("nombre","==",nombreEvento));
+                getDocs(queryEvento).then((docs)=>{
+                    docs.forEach((docu) => {
+                        deleteDoc(doc(colEventosUser,docu.id.toString()));
+                    })})
+            })
+        });
+    }
+    
     async function eliminaParticipante(){
         const eventosRef = collection(dbuse, "eventos"); 
         const eventoDoc = doc(eventosRef,idEvento);
         const membersRef = collection(eventoDoc,"participantes");
 
         await deleteDoc(doc(membersRef,email));
-        window.location.reload()
-        }
+        await eliminaEventoAUser().then(window.location.reload());
+    }
     useEffect(() => {
             if(getAuth().currentUser){
                 procesarDatos();
@@ -156,13 +205,13 @@ const Evento = (props) => {
             <div className="head-evento">
                 <h2>{nombreEvento}</h2>
                 
-                <button type="button" id="participaButton" class="btn btn-primary" onClick={participa}></button>
-                <button type="button" id="tematicaButton" class="btn btn-primary" onClick={seguirTematica}></button>
+                <button type="button" id="participaButton" className="btn btn-primary" onClick={participa}></button>
+                <button type="button" id="tematicaButton" className="btn btn-primary" onClick={seguirTematica}></button>
                 {
-                    numParticipantes !== 0 ? (<p>Numero de participantes: {numParticipantes}</p>) : (<p>Aún no hay participantes</p>)
+                    numParticipantes !== 0 ? (<p className='eventInfo'>Numero de participantes: {numParticipantes}</p>) : (<p>Aún no hay participantes</p>)
                 }
                 {
-                    soyOrganizador ? (<p>Organizador: <Link to={orgString}></Link>{organizador}</p>):(<p>Eres el organizador del evento</p>)
+                    soyOrganizador ? (<p>Eres el organizador del evento</p>):(<p>Organizador: <a href={orgString}>{organizador}</a></p>)
                 }
                 <br></br>
             </div>

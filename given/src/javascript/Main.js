@@ -13,7 +13,8 @@ const Main = (props) => {
     const muestraEventos = () =>{
         leeEventos().then((nombres) => {
                 var eventos = document.getElementById("ProxEventos")
-                if(eventos.lasElementChild){var child = eventos.lastElementChild; 
+                if(getAuth()){
+                    var child = eventos.lastElementChild; 
                     while (child) {
                         eventos.removeChild(child);
                         child = eventos.lastElementChild;

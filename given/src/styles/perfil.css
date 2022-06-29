@@ -1,31 +1,39 @@
-img {
-    width: 100%;
-    height: 100%;
-    border-radius:55px;
-}
+#profilePic {
+    display: block;
+    max-width:500px;
+    max-height:500px;
+    width: auto;
+    height: auto;
+    margin: 20px;
+  }
 #main-container-profile{
     box-shadow: 0 5px 8px 0 rgba(0, 0, 0, 0.2), 0 7px 20px 0 rgba(0, 0, 0, 0.2);
     border-radius: 10px;
+    padding:3%;
+    padding-right:15%;
+    padding-left:15%;
 }
 .text{
     color:#fff;
 }
 #container-header-profile{
     color:#683aa4;
+    margin:0;
 }
-#container-prof-1{
+.container-prof-1{
     width:50%;
     height:100%;
     color: #683aa4;
-    
+    padding:5%;
+    border-radius: 10px;
+    margin-right:3%;
 }
 #main-container-editprof{
-    box-shadow: 0 5px 8px 0 rgba(0, 0, 0, 0.2), 0 7px 20px 0 rgba(0, 0, 0, 0.2);
     border-radius: 10px;
     padding:12%;
 }
 .display-5{
-    margin-left:25%;
+    margin-left:7%;
 }
 .link-profile{
     text-decoration: none;
@@ -44,4 +52,25 @@ img {
 }
 #vuelveButton{
     margin-left:5%;
+}
+.userDescription{
+    text-align: justify;
+    color:rgba(0, 0, 0, 0.5);
+    margin-top:2%;
+}
+.formacionTitle{
+    margin-top:3%;
+    font-size: 25px;
+    color:#683aa4;
+    text-decoration:underline;
+}
+.formacionDiv{
+    border-radius: 10px;
+    margin-top:2%;
+}
+.liFormacion{
+    padding:0.5%;
+}
+#nameAndPic{
+    margin-left:4%;
 }

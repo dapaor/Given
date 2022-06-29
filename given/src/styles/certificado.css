@@ -1,0 +1,33 @@
+#logoGiven{
+    margin-left: 25%;
+    margin-top:10%;
+}
+#pdfDiv{
+    margin-top:5%;
+    border-color:#683aa4;
+    border-style:solid;
+    border-width:15px;
+    width: 210mm;
+    height: 297mm;
+}
+.textPDF{
+    color:black;
+}
+.nombreUsuario{
+    color:#683aa4;
+    font-size:larger;
+    font-weight: 600;
+}
+.nombreEvento{
+    color:#683aa4;
+    font-size:larger;
+    font-weight: 600;
+}
+#hr1{
+    color:#683aa4;
+    margin-top:12%;
+}
+#hr2{
+    color:#683aa4;
+    margin-top:5%;
+}

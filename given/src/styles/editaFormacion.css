@@ -1,0 +1,27 @@
+.titleFormacion{
+font-size: 25px;
+color:#683aa4;
+}
+.optionsDropdown{
+    margin-left:5%;
+    padding:3%;
+}
+.inputFormacion{
+    border: 2px solid #D7BDE2;
+}
+.buttonAnadir{
+    margin-left:3%;
+    background-color: white;
+    color: #683aa4;
+    border: 2px solid #D7BDE2;
+    border-radius:12px;
+}
+.buttonAnadir:hover{
+    background-color:#D7BDE2;
+    color:white;
+}
+.liFormacion{
+    list-style-type: none;
+    color:#683aa4;
+    margin-bottom:1%;
+}

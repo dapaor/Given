@@ -5,36 +5,39 @@ import { getAuth } from "firebase/auth";
 import { useEffect, useState } from 'react';
 import { withRouter } from 'react-router-dom';
 import { query,getFirestore,getDocs, where, collection} from 'firebase/firestore';
+import {getStorage,ref,getDownloadURL} from 'firebase/storage';
 import db from '../firebase'
 import SacaFormacion from './SacaFormacion';
 
-const PerfilPropio = (props) => {
+const PerfilAjeno = (props) => {
 
+    
     const [nombre,setNombre] = useState('');
     const [apellidos,setApellidos] = useState('');  
-    const [photoURL, setPhotoURL] = useState("/public/img/profileDefault.png")
     const [descripcion,setDescripcion] = useState('');
-
+    const [photoURL, setPhotoURL] = useState('');
+    const [idUser, setIdUser] = useState('');
     async function getDocData(db){
         const colRef = collection(db, "users");
-        const docRef = query(colRef, where("email","==",getAuth().currentUser.email.toLowerCase()));
+        const docRef = query(colRef, where("email","==",this.props.email.toString()));
+        
         const docSnap = await getDocs(docRef);
         docSnap.forEach( (doc) => {
             setNombre(doc.data().nombre);
             setApellidos(" "+doc.data().apellidos);
             setDescripcion(doc.data().descripcion);
+            setIdUser(doc.id)
         })
-        
+        const storage = getStorage();
+        const pathReference = ref(storage, idUser+'.png');
+        getDownloadURL(ref(storage, 'images/stars.jpg')).then((url) => {
+            setPhotoURL(url);
+        })
     }
     useEffect(() => {
         if(getAuth().currentUser){
             const dbuse = getFirestore(db);
             getDocData(dbuse);
-            if(getAuth().currentUser.photoURL){
-                setPhotoURL(getAuth().currentUser.photoURL)
-            }else{
-                setPhotoURL("https://firebasestorage.googleapis.com/v0/b/given-b6d8f.appspot.com/o/aEguqoLTuGbl1GOYiplc7Sx1XSw1.png?alt=media&token=b6fb3804-dfcf-40b8-98be-717ae7dfd27c");
-            }
         }else{
             props.history.push('/login');
         }
@@ -57,15 +60,6 @@ const PerfilPropio = (props) => {
                                     <div className="container-prof-1">
                                         <Link to='/eventosAsistidos'><h6>Eventos asistidos</h6></Link>
                                     </div>
-                                    <div className="container-prof-1">
-                                        <Link to='/listaEventos'><h6>Mis eventos</h6></Link>
-                                    </div>
-                                    <div className="container-prof-1">
-                                        <Link to="/editarPerfil" className='link-profile'><h6>Editar perfil</h6></Link>
-                                    </div>
-                                    <div className="container-prof-1">
-                                        <Link to="/editarFormacion" className='link-profile'><h6>Editar formación</h6></Link>
-                                    </div>s
                                 </div>
                             </div>
                             <div className="formacionDiv">
@@ -81,4 +75,4 @@ const PerfilPropio = (props) => {
             </div> 
     )
     }
-export default withRouter(PerfilPropio)
+export default withRouter(PerfilAjeno)

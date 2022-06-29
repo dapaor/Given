@@ -13,7 +13,8 @@ const FormEventos = (props) => {
     const [values, setValues] = useState({
         nombre: '',
         tematica: '',
-        descripcion: ''
+        descripcion: '',
+        ubicacion: ''
     });
     const handleChange = e => {
         const {name, value} = e.target
@@ -41,6 +42,7 @@ const FormEventos = (props) => {
         nombre: values.nombre,
         tematica: values.tematica,
         descripcion: values.descripcion,
+        ubicacion: values.ubicacion,
         fechaini: startDate,
         fechafin: endDate,
         organizador: getAuth().currentUser.email
@@ -48,6 +50,7 @@ const FormEventos = (props) => {
     }
     return (
         <div className='form-content-right-evs'>
+            <h1 className='tituloForm'>Crea un nuevo evento</h1>
              <form className="form-evs" onSubmit={addEvento}>
                 <div className="form-inputs-evs">
                     <label htmlFor="nombre" className="form-label">Nombre del evento</label>
@@ -62,6 +65,12 @@ const FormEventos = (props) => {
                     onChange={handleChange}/>
                 </div>
                 <div className="form-inputs-evs">
+                    <label htmlFor="ubicacion" className="form-label">Ubicación</label>
+                    <input type="text" name="ubicacion" className="form-input" placeholder="Ubicación del evento"
+                    value={values.ubicacion}
+                    onChange={handleChange}/>
+                </div>
+                <div className="form-inputs-evs">
                     <label htmlFor="descripcion" className="form-label">Descripción</label>
                     <input type="text" name="descripcion" className="form-input" placeholder="Descripción del evento"
                     value={values.descripcion}
@@ -69,7 +78,7 @@ const FormEventos = (props) => {
                 </div>
                 <div className="form-inputs-evs">
                     <label htmlFor="fechaEvento" className="form-label">Fecha de inicio</label>
-                    <DatePicker id="fechaini"selected={startDate} selectsStart endDate={endDate}onChange={(date) => setStartDate(date)} 
+                    <DatePicker id="fechaini"selected={startDate} format = "dd/mm/yyyy"selectsStart endDate={endDate}onChange={(date) => setStartDate(date)} 
                     value={values.fechaini}/>
                     <label htmlFor="fechaEvento" className="form-label">Fecha de final</label>
                     <DatePicker id="fechafin"selected={endDate} selectsEnd startDate={startDate} endDate={endDate} minDate={startDate}

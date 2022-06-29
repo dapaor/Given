@@ -3,12 +3,12 @@
 body{
   padding:5%;
 }
-#form-content-eventos {
-  padding:5%;
+.form-content-eventos {
   margin-bottom:0;
   box-shadow: 0 5px 8px 0 rgba(0, 0, 0, 0.2), 0 7px 20px 0 rgba(0, 0, 0, 0.2);
   border-radius: 10px;
-
+  width:100%;
+  height:fit-content;
 }
 
 .form-img {
@@ -18,7 +18,6 @@ body{
   left: 50%;
   transform: translate(-50%, -50%);
 }
-
 .form-img-2 {
  
   top: 50%;
@@ -28,13 +27,9 @@ body{
 .form-content-right-evs {
   border-radius: 10px;
   position: relative;
-  padding:12%;
-  margin-top:0;
 }
 .form-evs {
-  position: absolute;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  position: relative;
   width: 90%;
   display: flex;
   flex-direction: column;
@@ -49,11 +44,12 @@ h1 {
   font-size: 2rem;
   text-align: start;
   width: 80%;
-  margin-bottom: 1rem;
   color: #683aa4;
-  margin-bottom:15%;
 }
-
+.tituloForm{
+  margin-top:5%;
+  margin-left:5%;
+}
 .form-inputs-evs {
   width: 80%;
   box-sizing: border-box;
@@ -74,7 +70,6 @@ h1 {
 }
 .form-inputs p {
   font-size: 0.8rem;
-  margin-top: 0.5rem;
   color: #f00e0e;
 }
 

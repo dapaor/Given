@@ -3,6 +3,8 @@
 .navbar{
     border-radius: 1%;
     align-items: center;
+    padding:0;
+    margin-bottom:5%;
 }
 .navbar-brand{
     color:rgba(104,58,164,1);

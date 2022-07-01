@@ -9,4 +9,30 @@ h2{
 }
 .eventInfo{
     margin-top:2%;
+    color:#683aa4;
+}
+.btn{
+    background-color: #683aa4;
+    margin:2%;
+    border:#683aa4;
+}
+.btn:hover{
+    background-color:#D7BDE2;
+}
+.divDesc{
+    margin-top:50%;
+    padding:10%;
+}
+.carouselEvento{
+    max-width: 800px;
+    margin: 0 auto;
+    display:flex;
+}
+#imagenEvento{
+    width:100%;
+    height:400px;
+    background-size: cover;
+}
+#retroceder, #avanzar{
+    width:15%;
 }

@@ -20,6 +20,7 @@ import Evento from "./javascript/Evento.js";
 import EditaFormacion from "./javascript/EditaFormacion";
 import EventosAsistidos from "./javascript/EventosAsistidos";
 import GetCertificate from "./components/GetCertificate";
+import EditarEvento from "./components/EditarEvento"
 
 function App() {
   const [firebaseUser,setFirebaseUser] = useState(false);
@@ -66,11 +67,14 @@ function App() {
           <Route path="/eventosAsistidos">
             <EventosAsistidos/>
           </Route>
-          <Route path="/" exact>
-            <Main/>
-          </Route>
           <Route path="/getCertificate">
             <GetCertificate/>
+          </Route>
+          <Route path="/editaEvento">
+            <EditarEvento/>
+          </Route>
+          <Route path="/" exact>
+            <Main/>
           </Route>
         </Switch>
       </div>

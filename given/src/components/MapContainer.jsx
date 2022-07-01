@@ -2,18 +2,22 @@ import {Map, GoogleApiWrapper, Marker} from 'google-maps-react';
 import { Component } from 'react';
 const mapStyles = {
   width: '30%',
-  height: '70%',
+  height: '30%',
+  marginLeft: '25%',
+  padding:'5%',
+  z:'0',
+  id:'mapa'
 };
 export class MapContainer extends Component {
   render() {
     return (
       <Map
         google={this.props.google}
-        zoom={8}
+        zoom={16}
         style={mapStyles}
-        initialCenter={{ lat: 47.444, lng: -122.176}}
+        initialCenter={{ lat: 38.382778, lng: -0.514722}}
       >
-      <Marker position={{ lat: 48.00, lng: -122.00}} />
+      <Marker position={{ lat: 38.382778, lng: -0.514722}} />
     </Map>
     );
   }s

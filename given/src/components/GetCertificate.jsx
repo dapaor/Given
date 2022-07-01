@@ -52,7 +52,7 @@ const GetCertificate = () =>{
                 setFechaFin (fechaFinaux.getDay().toString()+" de "+(fechaFinaux.getMonth()+1).toString()+" del "+fechaFinaux.getFullYear().toString())
 
                 if(fechafin.dia === fechaini.dia && 
-                   fechafin.mes === fechafin.mes  &&
+                   fechafin.mes === fechaini.mes  &&
                    fechafin.año === fechaini.año) setUnDia(true);
                 
 
@@ -79,10 +79,10 @@ const GetCertificate = () =>{
             <p className="nombreEvento">{nEvento}</p>
             {
                 unDia ? 
-                (<p className="textPDF">que ha tenido lugar el día {fechaini}</p>) 
+                (<p className="textPDF">que ha tenido lugar el día {fechaini}.</p>) 
                 : 
                 (<p className="textPDF">que tuvo lugar entre los días  {fechaini} 
-                 y  {fechafin}</p>)
+                 y  {fechafin}.</p>)
             }
             <p className="textPDF">Muchas gracias por su asistencia. Esperamos que haya disfrutado del evento y que pueda asistir a próximas actividades.</p>
             <br></br>

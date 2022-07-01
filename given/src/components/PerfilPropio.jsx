@@ -43,7 +43,6 @@ const PerfilPropio = (props) => {
         <div id="main-container-profile">
                 <div className="container mt-5 mb-5">
                     <div className="row no-gutters">
-                        
                         <div className="col" id="nameAndPic">
                         <div id="container-header-profile">
                             <h3 className="display-5" >{nombre}{apellidos}</h3>
@@ -69,14 +68,14 @@ const PerfilPropio = (props) => {
                                 </div>
                             </div>
                             <div className="formacionDiv">
-                                <p className="formacionTitle">Formacion:</p>
+                                <p className="formacionTitle">Formación:</p>
                                 <SacaFormacion/>
                             </div>
                         </div>
                     </div>
                     <div className="col">
                         <p id="userDescription" className="userDescription">{descripcion}</p>
-                        </div>
+                    </div>
                 </div>
             </div> 
     )

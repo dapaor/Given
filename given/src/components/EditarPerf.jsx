@@ -51,7 +51,7 @@ const EditarPerf = (props,{submitForm}) => {
         
         const docRef = doc(dbuse,"users",docID)
         await updateDoc(docRef,{
-            email: values.email,
+            email: values.email.toLowerCase(),
             nombre: values.nombre,
             apellidos: values.apellidos
         })

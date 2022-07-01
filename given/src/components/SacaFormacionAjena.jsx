@@ -6,7 +6,7 @@ import db from '../firebase'
 import {withRouter} from 'react-router-dom'
 
 
-const SacaFormacion = (props) => {
+const SacaFormacionAjena = (props) => {
     const formaciones = [];
     useEffect(() => {
         if(getAuth().currentUser){
@@ -18,28 +18,26 @@ const SacaFormacion = (props) => {
     },[props,getFormacionUser]);
     async function getFormacionUser(dbuse){
         const colRef = collection(dbuse, "users");
-        const queryUser = query(colRef, where("email","==",getAuth().currentUser.email.toLowerCase()));
+        const queryUser = query(colRef, where("email","==",props.email));
         getDocs(queryUser).then((docs)=>{
             docs.forEach((docu) => {
                 const docRefUser = doc(dbuse, "users", docu.id.toString());
                 const colFormacion = query(collection(docRefUser,"formacion")); //tenemos la coleccion de formacion del user
                 getDocsFormacion(colFormacion).then(() => {
                     var ul = document.getElementById("ulFormacion");
-                    if(ul !== null){
-                        if(ul.lastElementChild){
-                            var child = ul.lastElementChild; 
-                            while (child) {
-                                ul.removeChild(child);
-                                child = ul.lastElementChild;
-                            }
+                    if(ul.lastElementChild){
+                        var child = ul.lastElementChild; 
+                        while (child) {
+                            ul.removeChild(child);
+                            child = ul.lastElementChild;
                         }
-                        formaciones.forEach((form) => {
-                            var li = document.createElement("li");
-                            li.className="liFormacion"
-                            li.innerHTML = form;
-                            ul.appendChild(li);
-                        })
                     }
+                    formaciones.forEach((form) => {
+                        var li = document.createElement("li");
+                        li.className="liFormacion"
+                        li.innerHTML = form;
+                        ul.appendChild(li);
+                    })
                 });
             })
             
@@ -55,4 +53,4 @@ const SacaFormacion = (props) => {
         <img src="../public/img/remove.png"></img>
     </ul>);
 }
-export default withRouter(SacaFormacion)
+export default withRouter(SacaFormacionAjena)

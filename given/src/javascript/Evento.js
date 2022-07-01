@@ -27,8 +27,11 @@ const Evento = (props) => {
     const [tematica,setTematica] = useState("");
     const [fechaFin,setFechaFin] = useState("");
     const [orgString,setOrgString] = useState("");
-
-    const leeEvento= async ()=>{
+    const [ubicacion,setUbicacion] = useState("");
+    const editarEvento = "/editaEvento/"+idEvento;
+    const anadePrograma = "/anadePrograma/"+idEvento;
+    const imagenes=[]
+    const leeEvento= async () =>{
         if(getAuth().currentUser){
 
             const docRef = doc(dbuse, "eventos", idEvento);
@@ -36,12 +39,12 @@ const Evento = (props) => {
             setNombreEvento(docSnap.data().nombre)
             setDescripcion(docSnap.data().descripcion)
             setOrganizador(docSnap.data().organizador)
-            const qOrg = query(collection(dbuse,"users"), where("email","==",organizador))
-            const qOrgSnapShot = await getDocs(qOrg);
-            qOrgSnapShot.forEach((doc) => {
-                setOrgString("/perfil/"+doc.data().email)
-            })
+            setUbicacion(docSnap.data().ubicacion);
+            setOrgString("/perfil/"+docSnap.data().organizador);
             setFechaFin(docSnap.data().fechafin);
+
+            if(getAuth().currentUser.email === docSnap.data().organizador) setSoyOrganizador(true);
+            
             const q = query(collection(docRef,"participantes"));
             const querySnapshot = await getDocs(q);
             querySnapshot.forEach((doc) => {
@@ -80,9 +83,6 @@ const Evento = (props) => {
         leeEvento().then((evento) => {
             var boton = document.getElementById("participaButton")
            
-            if(organizador.toString() === getAuth().currentUser.email.toString()) {
-                setSoyOrganizador(true);
-            }
             setNumParticipantes(participantes.length);
             if(participantes.find(element => element === getAuth().currentUser.email)) {
                 boton.innerHTML="No voy a asistir"
@@ -208,14 +208,32 @@ const Evento = (props) => {
                 <button type="button" id="participaButton" className="btn btn-primary" onClick={participa}></button>
                 <button type="button" id="tematicaButton" className="btn btn-primary" onClick={seguirTematica}></button>
                 {
+                    soyOrganizador ? (<div>
+                        <Link to={editarEvento}><button type="button" id="linkEditar" className="btn btn-primary">Edita tu evento</button></Link>
+                        <Link to ={anadePrograma} className='linkEditar'><button className='btn btn-primary'>Añade el programa del evento</button></Link>
+                        </div>) : null
+                }
+                <div id="ubicacionDiv">
+                <MapContainer/>
+                
+                <p className='eventInfo'>Ubicación: {ubicacion}</p>
+                </div>
+                
+                <br></br>
+            </div>
+            <div id="divDesc" className='divDesc'>{descripcion}
+                {
                     numParticipantes !== 0 ? (<p className='eventInfo'>Numero de participantes: {numParticipantes}</p>) : (<p>Aún no hay participantes</p>)
                 }
                 {
-                    soyOrganizador ? (<p>Eres el organizador del evento</p>):(<p>Organizador: <a href={orgString}>{organizador}</a></p>)
+                    soyOrganizador ? (<p className='eventInfo'>Eres el organizador del evento</p>):(<p className='eventInfo'>Organizador: <a href={orgString}>{organizador}</a></p>)
                 }
-                <br></br>
             </div>
-            <div>{descripcion}</div>
+            <div class="carouselEvento">
+                <button id="retroceder">Retroceder</button>
+                <div id="imagenEvento"></div>
+                <button id="avanzar">Avanzar</button>
+            </div>
         </div>
     )
 }

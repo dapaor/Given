@@ -13,9 +13,6 @@ const Perfil = (props) => {
         if(getAuth().currentUser){
             const url = window.location.href.toString();
             const params = (url.split("/")); 
-
-            console.log(params)
-            console.log(getAuth().currentUser.email);
             if(params.length >= 5){
                 if(params[4] !== getAuth().currentUser.email){
                     setEmail(params[4])
